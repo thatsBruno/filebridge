@@ -3,18 +3,9 @@ import supabase from "../lib/supabase";
 
 function Files() {
     const [files, setFiles] = useState([]);
-    let bucket: string = 'avatars';
+    let bucket = 'user-files';
 
     // create a bucket.
-    async function createBucket(bucketName: string) {
-        bucket = bucketName;
-        const { data, error } = await supabase.storage.createBucket(bucketName, {
-            public: true, // default: false
-        })
-        console.log(data, error);
-    }
-    createBucket(bucket);
-
     // async function uploadFile(file: File) {
     //     const { data, error } = await supabase.storage
     //         .from(bucket)
@@ -26,12 +17,17 @@ function Files() {
         const { data, error } = await supabase
             .storage
             .from(bucket)
-            .list('folder', {
+            .list('', {  // Changed 'folder' to '' to list files in the root
                 limit: 100,
                 offset: 0,
                 sortBy: { column: 'name', order: 'asc' },
             })
-        console.log(data, error);
+        
+        if (error) {
+            console.error('Error fetching files:', error);
+        } else {
+            setFiles(data || []);  // Update the state with the fetched files
+        }
     }
 
     // async function deleteFile(bucket: string, fileName: string) {
@@ -52,17 +48,16 @@ function Files() {
 
     useEffect(() => {
         listAllFiles(bucket);
-    }, [bucket]);
+    }, []);  // Remove bucket from dependencies as it's now a constant
 
     return (
         <>
-        // list the files
-        console.log(files);
-        <ul>
-            {files.map((file) => (
-                <li key={file}>{file}</li>
-            ))}
-        </ul>
+            <h2>Files in {bucket} bucket:</h2>
+            <ul>
+                {files.map((file) => (
+                    <li key={file.name}>{file.name}</li>  // Use file.name instead of file
+                ))}
+            </ul>
         </>
     );
 }

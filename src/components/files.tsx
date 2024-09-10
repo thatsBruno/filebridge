@@ -55,12 +55,15 @@ function Files() {
     }, [bucket]);
 
     return (
+        <>
         // list the files
+        console.log(files);
         <ul>
             {files.map((file) => (
-                <li key={file.name}>{file.name}</li>
+                <li key={file}>{file}</li>
             ))}
         </ul>
+        </>
     );
 }
 

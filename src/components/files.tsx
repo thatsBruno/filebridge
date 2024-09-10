@@ -38,24 +38,36 @@ function Files() {
     //     console.log(data, error);
     // }
 
-    // async function getUrl(fileName: string, bucket: string) {
-    //     const { data } = supabase.storage.from(bucket).createSignedUrl(fileName, 3600)
-    //     if (data) {
-    //         console.log(data.signedUrl)
-    //     }
-    //     return data.publicUrl
-    // }
+    async function getUrl(fileName: string, bucket: string): Promise<string | null> {
+        const { data, error } = await supabase.storage.from(bucket).createSignedUrl(fileName, 3600)
+        if (data) {
+            console.log(data.signedUrl)
+            return data.signedUrl
+        }
+        if (error) {
+            console.error('Error creating signed URL:', error)
+        }
+        return null
+    }
 
     useEffect(() => {
         listAllFiles(bucket);
-    }, []);  // Remove bucket from dependencies as it's now a constant
+    }, []);
 
     return (
         <>
             <h2>Files in {bucket} bucket:</h2>
             <ul>
                 {files.map((file) => (
-                    <li key={file.name}>{file.name}</li>  // Use file.name instead of file
+                    <li key={file.id}>
+                        {file.name}
+                        <button onClick={async () => {
+                            const url = await getUrl(file.name, bucket)
+                            if (url) {
+                                window.open(url, '_blank')
+                            }
+                        }}>Download file</button>
+                    </li>
                 ))}
             </ul>
         </>

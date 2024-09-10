@@ -3,15 +3,16 @@ import supabase from "../lib/supabase";
 
 function Files() {
     const [files, setFiles] = useState([]);
+    const [selectedFile, setSelectedFile] = useState<File | null>(null);
     let bucket = 'user-files';
 
     // create a bucket.
-    // async function uploadFile(file: File) {
-    //     const { data, error } = await supabase.storage
-    //         .from(bucket)
-    //         .upload(file.name, file)
-    //     console.log(data, error);
-    // }
+    async function uploadFile(file: File) {
+        const { data, error } = await supabase.storage
+        .from(bucket)
+            .upload(file.name, file)
+        console.log(data, error);
+    }
 
     async function listAllFiles(bucket: string) {
         const { data, error } = await supabase
@@ -50,6 +51,20 @@ function Files() {
         return null
     }
 
+
+    const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        if (event.target.files && event.target.files.length > 0) {
+            setSelectedFile(event.target.files[0]);
+        }
+    };
+
+    const handleUpload = async () => {
+        if (selectedFile) {
+            await uploadFile(selectedFile);
+            listAllFiles(bucket); // Refresh the file list after upload
+        }
+    };
+
     useEffect(() => {
         listAllFiles(bucket);
     }, []);
@@ -57,6 +72,10 @@ function Files() {
     return (
         <>
             <h2>Files in {bucket} bucket:</h2>
+            <input type="file" onChange={handleFileChange} />
+            <button onClick={handleUpload} disabled={!selectedFile}>
+                Upload File
+            </button>
             <ul>
                 {files.map((file) => (
                     <li key={file.id}>

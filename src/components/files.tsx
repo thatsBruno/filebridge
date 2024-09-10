@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import supabase from "../lib/supabase";
+import styles from './files.module.css';  // Import the CSS module
 
 function Files() {
     const [files, setFiles] = useState([]);
@@ -62,6 +63,7 @@ function Files() {
         if (selectedFile) {
             await uploadFile(selectedFile);
             listAllFiles(bucket); // Refresh the file list after upload
+            setSelectedFile(null);
         }
     };
 
@@ -70,26 +72,33 @@ function Files() {
     }, []);
 
     return (
-        <>
-            <h2>Files in {bucket} bucket:</h2>
-            <input type="file" onChange={handleFileChange} />
-            <button onClick={handleUpload} disabled={!selectedFile}>
-                Upload File
-            </button>
-            <ul>
+        <div className={styles.filesContainer}>
+            <h2 className={styles.title}>Files in {bucket} bucket:</h2>
+            <div className={styles.uploadSection}>
+                <input type="file" onChange={handleFileChange} className={styles.fileInput} />
+                <button onClick={handleUpload} disabled={!selectedFile} className={styles.uploadButton}>
+                    Upload File
+                </button>
+            </div>
+            <ul className={styles.fileList}>
                 {files.map((file) => (
-                    <li key={file.id}>
+                    <li key={file.id} className={styles.fileItem}>
                         {file.name}
-                        <button onClick={async () => {
-                            const url = await getUrl(file.name, bucket)
-                            if (url) {
-                                window.open(url, '_blank')
-                            }
-                        }}>Download file</button>
+                        <button 
+                            onClick={async () => {
+                                const url = await getUrl(file.name, bucket)
+                                if (url) {
+                                    window.open(url, '_blank')
+                                }
+                            }}
+                            className={styles.downloadButton}
+                        >
+                            Download file
+                        </button>
                     </li>
                 ))}
             </ul>
-        </>
+        </div>
     );
 }
 

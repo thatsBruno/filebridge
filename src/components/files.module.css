@@ -1,0 +1,61 @@
+.filesContainer {
+    display: flex;
+    align-content: center;
+    justify-content: center;
+    flex-direction: column;
+    padding: 20px;
+    font-family: Arial, sans-serif;
+  }
+  
+  .title {
+    text-align: center;
+    color: #333;
+  }
+  
+  .uploadSection {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+  
+  .fileInput {
+    margin-right: 10px;
+  }
+  
+  .uploadButton {
+    padding: 8px 16px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  .uploadButton:disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
+  }
+  
+  .fileList {
+    list-style-type: none;
+    padding: 0;
+  }
+  
+  .fileItem {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    border-bottom: 1px solid #eee;
+  }
+  
+  .downloadButton {
+    padding: 6px 12px;
+    margin-left: 2rem;
+    background-color: none;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }

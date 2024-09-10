@@ -5,11 +5,15 @@
     flex-direction: column;
     padding: 20px;
     font-family: Arial, sans-serif;
+    min-width: 160vh;
+    min-height: 93vh;
+    border: 1px solid #eee;
+    border-radius: 8px;
   }
   
   .title {
     text-align: center;
-    color: #333;
+    color: #ffff;
   }
   
   .uploadSection {

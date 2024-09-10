@@ -72,33 +72,33 @@ function Files() {
     }, []);
 
     return (
-        <div className={styles.filesContainer}>
-            <h2 className={styles.title}>Files in {bucket} bucket:</h2>
-            <div className={styles.uploadSection}>
-                <input type="file" onChange={handleFileChange} className={styles.fileInput} />
-                <button onClick={handleUpload} disabled={!selectedFile} className={styles.uploadButton}>
-                    Upload File
-                </button>
+            <div className={styles.filesContainer}>
+                <h2 className={styles.title}>Files in {bucket} bucket:</h2>
+                <div className={styles.uploadSection}>
+                    <input type="file" onChange={handleFileChange} className={styles.fileInput} />
+                    <button onClick={handleUpload} disabled={!selectedFile} className={styles.uploadButton}>
+                        Upload File
+                    </button>
+                </div>
+                <ul className={styles.fileList}>
+                    {files.map((file) => (
+                        <li key={file.id} className={styles.fileItem}>
+                            {file.name}
+                            <button 
+                                onClick={async () => {
+                                    const url = await getUrl(file.name, bucket)
+                                    if (url) {
+                                        window.open(url, '_blank')
+                                    }
+                                }}
+                                className={styles.downloadButton}
+                            >
+                                Download file
+                            </button>
+                        </li>
+                    ))}
+                </ul>
             </div>
-            <ul className={styles.fileList}>
-                {files.map((file) => (
-                    <li key={file.id} className={styles.fileItem}>
-                        {file.name}
-                        <button 
-                            onClick={async () => {
-                                const url = await getUrl(file.name, bucket)
-                                if (url) {
-                                    window.open(url, '_blank')
-                                }
-                            }}
-                            className={styles.downloadButton}
-                        >
-                            Download file
-                        </button>
-                    </li>
-                ))}
-            </ul>
-        </div>
     );
 }
 

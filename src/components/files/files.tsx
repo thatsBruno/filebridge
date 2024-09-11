@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react";
 import supabase from "../../lib/supabase";
 import styles from './files.module.css';  // Import the CSS module
-import { FaDownload, FaUpload } from 'react-icons/fa';
+import { FaDownload, FaUpload, FaFile, FaTrash } from 'react-icons/fa';
 
 function Files() {
     const [files, setFiles] = useState([]);
     const [selectedFile, setSelectedFile] = useState<File | null>(null);
+    const [selectedListFile, setSelectedListFile] = useState(null);
     let bucket = 'user-files';
 
     // create a bucket.
@@ -53,7 +54,6 @@ function Files() {
         return null
     }
 
-
     const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         if (event.target.files && event.target.files.length > 0) {
             setSelectedFile(event.target.files[0]);
@@ -68,38 +68,69 @@ function Files() {
         }
     };
 
+    const handleFileSelect = (file) => {
+        setSelectedListFile(file);
+    };
+
+    const handleDownload = async () => {
+        if (selectedListFile) {
+            const url = await getUrl(selectedListFile.name, bucket);
+            if (url) {
+                window.open(url, '_blank');
+            }
+        }
+    };
+
     useEffect(() => {
         listAllFiles(bucket);
     }, []);
 
     return (
-            <div className={styles.filesContainer}>
-                <h2 className={styles.title}>Files in {bucket} bucket:</h2>
+        <div className={styles.dashboard}>
+            <div className={styles.sidebar}>
+                <h2 className={styles.sidebarTitle}>{bucket} Bucket</h2>
+                <ul className={styles.fileList}>
+                    {files.map((file) => (
+                        <li 
+                            key={file.id} 
+                            className={`${styles.fileItem} ${selectedListFile === file ? styles.selected : ''}`}
+                            onClick={() => handleFileSelect(file)}
+                        >
+                            <FaFile className={styles.fileIcon} />
+                            <span className={styles.fileName}>{file.name}</span>
+                        </li>
+                    ))}
+                </ul>
+            </div>
+            <div className={styles.mainContent}>
                 <div className={styles.uploadSection}>
                     <input type="file" onChange={handleFileChange} className={styles.fileInput} />
                     <button onClick={handleUpload} disabled={!selectedFile} className={styles.uploadButton}>
                         <FaUpload /> Upload File
                     </button>
                 </div>
-                <ul className={styles.fileList}>
-                    {files.map((file) => (
-                        <li key={file.id} className={styles.fileItem}>
-                            {file.name}
-                            <button 
-                                onClick={async () => {
-                                    const url = await getUrl(file.name, bucket)
-                                    if (url) {
-                                        window.open(url, '_blank')
-                                    }
-                                }}
-                                className={styles.downloadButton}
-                            >
-                                <FaDownload /> Download
-                            </button>
-                        </li>
-                    ))}
-                </ul>
+                <div className={styles.fileDetails}>
+                    <h3>File Details</h3>
+                    {selectedListFile ? (
+                        <div>
+                            <p><strong>Name:</strong> {selectedListFile.name}</p>
+                            <p><strong>Size:</strong> {(selectedListFile.metadata.size / 1024).toFixed(2)} KB</p>
+                            <p><strong>Created:</strong> {new Date(selectedListFile.created_at).toLocaleString()}</p>
+                            <p><strong>Last Modified:</strong> {new Date(selectedListFile.updated_at).toLocaleString()}</p>
+                        </div>
+                    ) : (
+                        <p>No file selected</p>
+                    )}
+                </div>
+                <button 
+                    className={styles.downloadButton} 
+                    onClick={handleDownload} 
+                    disabled={!selectedListFile}
+                >
+                    <FaDownload /> Download Selected File
+                </button>
             </div>
+        </div>
     );
 }
 

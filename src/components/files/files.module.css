@@ -1,65 +1,124 @@
-.filesContainer {
+.dashboard {
     display: flex;
-    align-content: center;
-    justify-content: center;
-    flex-direction: column;
-    padding: 20px;
+    height: 90vh; /* Changed from 100% to 100vh */
+    width: 100vw;
+    overflow: hidden;
     font-family: Arial, sans-serif;
-    min-width: 160vh;
-    min-height: 93vh;
-    border: 1px solid #eee;
-    border-radius: 8px;
-  }
-  
-  .title {
-    text-align: center;
-    color: #ffff;
-  }
-  
-  .uploadSection {
+    background-color: #1a1a1a;
+    color: #e0e0e0;
+}
+
+.sidebar {
+    width: 300px;
+    background-color: #2a2a2a;
+    border-right: 1px solid #444;
+    padding: 20px;
     display: flex;
-    justify-content: center;
-    align-items: center;
+    flex-direction: column;
+}
+
+.sidebarTitle {
+    margin-top: 0;
     margin-bottom: 20px;
-  }
-  
-  .fileInput {
-    margin-right: 10px;
-  }
-  
-  .uploadButton {
-    padding: 8px 16px;
-    background-color: #4CAF50;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-  }
-  
-  .uploadButton:disabled {
-    background-color: #cccccc;
-    cursor: not-allowed;
-  }
-  
-  .fileList {
+    color: #8a8a8a;
+}
+
+.fileList {
     list-style-type: none;
     padding: 0;
-  }
-  
-  .fileItem {
+    margin: 0;
+    overflow-y: auto;
+    flex-grow: 1;
+}
+
+.fileItem {
     display: flex;
-    justify-content: space-between;
     align-items: center;
     padding: 10px;
-    border-bottom: 1px solid #eee;
-  }
-  
-  .downloadButton {
-    padding: 6px 12px;
-    margin-left: 2rem;
-    background-color: none;
-    color: white;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.fileItem:hover {
+    background-color: #3a3a3a;
+}
+
+.fileIcon {
+    margin-right: 10px;
+    color: #949494;
+}
+
+.fileName {
+    flex-grow: 1;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.mainContent {
+    flex-grow: 1;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+    background-color: #1a1a1a;
+}
+
+.uploadSection {
+    display: flex;
+    margin-bottom: 20px;
+}
+
+.fileInput {
+    flex-grow: 1;
+    margin-right: 10px;
+}
+
+.uploadButton, .downloadButton {
+    display: flex;
+    align-items: center;
+    padding: 8px 16px;
+    background-color: #4CAF50;
+    color: #ffffff;
     border: none;
     border-radius: 4px;
     cursor: pointer;
-  }
+}
+
+.uploadButton:hover, .downloadButton:hover {
+    background-color: #45a049;
+}
+
+.uploadButton:disabled {
+    background-color: #555555;
+    cursor: not-allowed;
+}
+
+.downloadButton {
+    background-color: #2196F3;
+    margin-top: auto;
+}
+
+.downloadButton:hover {
+    background-color: #1e87db;
+}
+
+.fileDetails {
+    flex-grow: 1;
+    margin-bottom: 20px;
+    overflow-y: auto;
+}
+
+/* New styles for better contrast and readability */
+input, button {
+    background-color: #333333;
+    color: #e0e0e0;
+    border: 1px solid #555555;
+}
+
+input:focus, button:focus {
+    outline: none;
+    border-color: #4CAF50;
+}
+
+/* Add any additional styles as needed */

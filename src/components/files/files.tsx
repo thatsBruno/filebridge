@@ -106,7 +106,7 @@ function Files() {
                 <div className={styles.uploadSection}>
                     <input type="file" onChange={handleFileChange} className={styles.fileInput} />
                     <button onClick={handleUpload} disabled={!selectedFile} className={styles.uploadButton}>
-                        <FaUpload /> Upload File
+                        <FaUpload />
                     </button>
                 </div>
                 <div className={styles.fileDetails}>
@@ -122,13 +122,17 @@ function Files() {
                         <p>No file selected</p>
                     )}
                 </div>
-                <button 
-                    className={styles.downloadButton} 
-                    onClick={handleDownload} 
-                    disabled={!selectedListFile}
-                >
-                    <FaDownload /> Download Selected File
-                </button>
+                {selectedListFile ? (
+                    <button 
+                        className={styles.downloadButton} 
+                        onClick={handleDownload} 
+                        disabled={!selectedListFile}
+                    >
+                        <FaDownload /> Download Selected File
+                    </button>
+                ) : (
+                    <p></p>
+                )}
             </div>
         </div>
     );

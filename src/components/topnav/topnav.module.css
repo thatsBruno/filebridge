@@ -1,0 +1,49 @@
+.topNav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 1.5rem;
+    background-color: #f3f4f6;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.userName {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: #374151;
+}
+
+.buttonGroup {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 9999px;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.createButton {
+    background-color: #3b82f6;
+    color: white;
+}
+
+.createButton:hover {
+    background-color: #2563eb;
+}
+
+.logoutButton {
+    background-color: #ef4444;
+    color: white;
+}
+
+.logoutButton:hover {
+    background-color: #dc2626;
+}

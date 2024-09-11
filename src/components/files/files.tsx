@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
-import supabase from "../lib/supabase";
+import supabase from "../../lib/supabase";
 import styles from './files.module.css';  // Import the CSS module
+import { FaDownload, FaUpload } from 'react-icons/fa';
 
 function Files() {
     const [files, setFiles] = useState([]);
@@ -77,7 +78,7 @@ function Files() {
                 <div className={styles.uploadSection}>
                     <input type="file" onChange={handleFileChange} className={styles.fileInput} />
                     <button onClick={handleUpload} disabled={!selectedFile} className={styles.uploadButton}>
-                        Upload File
+                        <FaUpload /> Upload File
                     </button>
                 </div>
                 <ul className={styles.fileList}>
@@ -93,7 +94,7 @@ function Files() {
                                 }}
                                 className={styles.downloadButton}
                             >
-                                Download file
+                                <FaDownload /> Download
                             </button>
                         </li>
                     ))}

@@ -1,14 +1,15 @@
 import { FaPlus, FaSignOutAlt } from 'react-icons/fa';
 import styles from './topnav.module.css';
 import { FaBucket } from 'react-icons/fa6';
+import supabase from '../../lib/supabase';
 
 export default function TopNav() {
     const userName = "John Doe"; // Replace with actual user name or state
 
-    const handleLogout = () => {
-        // Implement logout logic here
-        console.log("Logout clicked");
-    };
+    async function handleLogout() {
+        const { error } = await supabase.auth.signOut();
+        console.log("Logout clicked", {error}); // Moved inside the function
+    } 
 
     return (
         <nav className={styles.topNav}>

@@ -6,25 +6,31 @@ import { useEffect, useState } from 'react';
 import { User } from '@supabase/supabase-js';
 
 export default function TopNav() {
-    const [user, setUser] = useState<User | null>(null)
+    const [user, setUser] = useState<User | null>(null);
 
-    const fetchUserData = async () => {
-        const { data: { user } } = await supabase.auth.getUser();
-        setUser(user);
-        if(user != null){
-            return user.user_metadata;
-        }
-    }
+    useEffect(() => {
+        const fetchUserData = async () => {
+            const { data: { user } } = await supabase.auth.getUser();
+            setUser(user);
+        };
+
+        fetchUserData(); // Fetch user data on component mount
+
+        const { data: { subscription } } = supabase.auth.onAuthStateChange((_, session) => {
+            setUser(session?.user || null);
+        });
+
+        // Cleanup function to unsubscribe
+        return () => {
+            subscription?.unsubscribe();
+        };
+    }, []); // Empty dependency array to run only once on mount
 
     async function handleLogout() {
         const { error } = await supabase.auth.signOut();
         console.log("Logout clicked", {error}); // Moved inside the function
     } 
 
-    useEffect(() => {
-      fetchUserData();
-    }, ) // Added dependency array to run only on mount
-    
     return (
         <nav className={styles.topNav}>
             <span className={styles.userName}>{user?.email}</span>

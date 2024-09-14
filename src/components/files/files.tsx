@@ -3,25 +3,43 @@ import supabase from "../../lib/supabase";
 import styles from './files.module.css';  // Import the CSS module
 import { FaDownload, FaUpload, FaFile, FaTrash } from 'react-icons/fa';
 
-function Files() {
+function Files({ user }) {
     const [files, setFiles] = useState([]);
     const [selectedFile, setSelectedFile] = useState<File | null>(null);
     const [selectedListFile, setSelectedListFile] = useState(null);
-    let bucket = 'user-files';
+    let bucket = `${user.email}-files`;  
 
     // create a bucket.
+    async function createBucket() {
+        // Ensure you have the correct permissions set in Supabase
+        const { data, error } = await supabase
+            .storage
+            .createBucket(bucket, {
+                public: true,
+            });
+        if (error) {  // Check for errors
+            console.error('Error creating bucket:', error);
+            // Consider logging the error status for debugging
+        }
+        console.log(data);
+    }
+    createBucket();
+
     async function uploadFile(file: File) {
         const { data, error } = await supabase.storage
-        .from(bucket)
-            .upload(file.name, file)
-        console.log(data, error);
+            .from(bucket)
+            .upload(file.name, file);
+        if (error) {  // Check for errors
+            console.error('Error uploading file:', error);
+        }
+        console.log(data);
     }
 
     async function listAllFiles(bucket: string) {
         const { data, error } = await supabase
             .storage
             .from(bucket)
-            .list('', {  // Changed 'folder' to '' to list files in the root
+            .list('', {  
                 limit: 100,
                 offset: 0,
                 sortBy: { column: 'name', order: 'asc' },
@@ -65,7 +83,7 @@ function Files() {
     };
 
     const handleDownload = async () => {
-        if (selectedListFile) {
+        if (selectedListFile && selectedListFile.name) {  // Check if name exists
             const url = await getUrl(selectedListFile.name, bucket);
             if (url) {
                 window.open(url, '_blank');

@@ -41,7 +41,7 @@ export default function Dashboard(){
         <div className="topnav">
         </div>
             {user ?
-            <><TopNav /> <Files /></> : 
+            <><TopNav /> <Files user={user} /> </> :  // Pass user to Files component
             <div className="login">
                 <Login />
             </div>

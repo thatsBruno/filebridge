@@ -34,14 +34,6 @@ function Files() {
         }
     }
 
-    // async function deleteFile(bucket: string, fileName: string) {
-    //     const { data, error } = await supabase
-    //         .storage
-    //         .from(bucket)
-    //         .remove([fileName])
-    //     console.log(data, error);
-    // }
-
     async function getUrl(fileName: string, bucket: string): Promise<string | null> {
         const { data, error } = await supabase.storage.from(bucket).createSignedUrl(fileName, 3600)
         if (data) {
@@ -77,6 +69,21 @@ function Files() {
             const url = await getUrl(selectedListFile.name, bucket);
             if (url) {
                 window.open(url, '_blank');
+            }
+        }
+    };
+
+    const handleDelete = async () => {
+        if (selectedListFile) {
+            const { data, error } = await supabase
+                .storage
+                .from(bucket)
+                .remove([selectedListFile.name]);
+            if (error) {
+                console.error('Error deleting file:', error);
+            } else {
+                setSelectedListFile(null);
+                listAllFiles(bucket);
             }
         }
     };
@@ -123,13 +130,22 @@ function Files() {
                     )}
                 </div>
                 {selectedListFile ? (
-                    <button 
-                        className={styles.downloadButton} 
-                        onClick={handleDownload} 
-                        disabled={!selectedListFile}
-                    >
-                        <FaDownload /> Download Selected File
-                    </button>
+                    <>
+                        <button 
+                            className={styles.downloadButton} 
+                            onClick={handleDownload} 
+                            disabled={!selectedListFile}
+                        >
+                            <FaDownload /> Download Selected File
+                        </button>
+                        <button 
+                            className={styles.deleteButton} 
+                            onClick={handleDelete} 
+                            disabled={!selectedListFile}
+                        >
+                            <FaTrash /> Delete Selected File
+                        </button>
+                    </>
                 ) : (
                     <p></p>
                 )}

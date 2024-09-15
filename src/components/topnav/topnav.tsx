@@ -31,12 +31,28 @@ export default function TopNav() {
         console.log("Logout clicked", {error}); // Moved inside the function
     } 
 
+   // create a bucket.
+    async function createBucket() {
+        if (user) {
+            const { data, error } = await supabase
+                .storage
+                .createBucket(`${user?.email}-files`, {
+                    public: true,
+                });
+            if (error) {  // Check for errors
+                console.error('Error creating bucket:', error);
+                // Consider logging the error status for debugging
+            }
+            console.log(data);
+        }
+    }
+
     return (
         <nav className={styles.topNav}>
             <span className={styles.userName}>{user?.email}</span>
             <h1 className={styles.appName}>Filebridge</h1>
             <div className={styles.buttonGroup}>
-                <button className={`${styles.button} ${styles.createButton}`} title="Create Bucket">
+                <button className={`${styles.button} ${styles.createButton}`} onClick={createBucket} title="Create Bucket">
                     <FaPlus />
                     <FaBucket />
                 </button>

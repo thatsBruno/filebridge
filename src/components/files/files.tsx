@@ -7,23 +7,8 @@ function Files({ user }) {
     const [files, setFiles] = useState([]);
     const [selectedFile, setSelectedFile] = useState<File | null>(null);
     const [selectedListFile, setSelectedListFile] = useState(null);
-    let bucket = `${user.email}-files`;  
-
-    // create a bucket.
-    async function createBucket() {
-        // Ensure you have the correct permissions set in Supabase
-        const { data, error } = await supabase
-            .storage
-            .createBucket(bucket, {
-                public: true,
-            });
-        if (error) {  // Check for errors
-            console.error('Error creating bucket:', error);
-            // Consider logging the error status for debugging
-        }
-        console.log(data);
-    }
-    createBucket();
+    // let bucket = `${user.email}-files`;  
+    let bucket = "user-files"
 
     async function uploadFile(file: File) {
         const { data, error } = await supabase.storage
